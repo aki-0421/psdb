@@ -3,7 +3,6 @@ package api
 import (
 	"bytes"
 	"context"
-	"crypto/tls"
 	"errors"
 	"io"
 	"net/http"
@@ -11,7 +10,6 @@ import (
 
 	"github.com/aki-0421/psdb/pkg/config"
 	"github.com/aki-0421/psdb/pkg/types"
-	"github.com/quic-go/quic-go/http3"
 )
 
 type Client struct {
@@ -62,15 +60,8 @@ func (c *Client) SendRequest(ctx context.Context, method, path string, body []by
 }
 
 func New(config *config.Config) (*Client, error) {
-	rt := http3.RoundTripper{
-		TLSClientConfig: &tls.Config{
-			MinVersion: tls.VersionTLS13,
-			MaxVersion: tls.VersionTLS13,
-		},
-	}
-	defer rt.Close()
 	hc := &http.Client{
-		Transport: &rt,
+		Transport: http.DefaultTransport,
 	}
 
 	c := Client{
