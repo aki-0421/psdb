@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/url"
 
+	"github.com/aki-0421/psdb/internal/pkg/transport"
 	"github.com/aki-0421/psdb/pkg/config"
 	"github.com/aki-0421/psdb/pkg/types"
 )
@@ -61,7 +62,7 @@ func (c *Client) SendRequest(ctx context.Context, method, path string, body []by
 
 func New(config *config.Config) (*Client, error) {
 	hc := &http.Client{
-		Transport: http.DefaultTransport,
+		Transport: &transport.Transport{},
 	}
 
 	c := Client{
